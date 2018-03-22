@@ -13,7 +13,7 @@ const {
     CLIENT_SECRET,
     CALLBACK_URL,
     CONNECTION_STRING,
-    REACT_APP_PRIVATES,
+    REACT_APP_PRIVATE,
     REACT_APP_FAILURE
 }=process.env;
 
@@ -23,7 +23,7 @@ massive(CONNECTION_STRING).then(db=>{
     app.set('db',db);
 });
 
-app.use(express.static(`{${__dirname}/../build`))
+app.use(express.static(`${__dirname}/../build`))
 
 app.use(session({
     secret:SESSION_SECRET,
@@ -65,7 +65,7 @@ passport.deserializeUser((id,done)=>{                       // takes sid, gets u
 
 app.get('/auth',passport.authenticate('auth0'));
 app.get('/auth/callback',passport.authenticate('auth0',{
-    successRedirect:REACT_APP_PRIVATES,
+    successRedirect:REACT_APP_PRIVATE,
     failureRedirect:REACT_APP_FAILURE
 }))
 app.get('/auth/me',(req,res)=>{
