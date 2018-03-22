@@ -4,7 +4,7 @@ const express=require('express'),
       passport=require('passport'),
       Auth0Strategy=require('passport-auth0'),
       massive=require('massive'),
-      cors=require('cors');
+      // cors=require('cors');
 
 const {
     SERVER_PORT,
