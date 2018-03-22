@@ -3,7 +3,8 @@ const express=require('express'),
       session=require('express-session'),
       passport=require('passport'),
       Auth0Strategy=require('passport-auth0'),
-      massive=require('massive');
+      massive=require('massive'),
+      cors=require('cors');
 
 const {
     SERVER_PORT,
@@ -24,6 +25,20 @@ massive(CONNECTION_STRING).then(db=>{
 });
 
 app.use(express.static(`${__dirname}/../build`))
+
+app.use((req, res, next) => {
+    res.set({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': REACT_APP_FAILURE,
+      'Access-Control-Allow-Methods': 'OPTIONS, GET, POST',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+      'Access-Control-Allow-Credentials': true,
+      'X-XSS-Protection': '1; mode=block',
+      'X-Frame-Options': 'SAMEORIGIN',
+      'Content-Security-Policy': "default-src 'self' unsafe-inline devmountain.github.io"
+    })
+    next();
+  });
 
 app.use(session({
     secret:SESSION_SECRET,
@@ -74,6 +89,9 @@ app.get('/auth/me',(req,res)=>{
     }else{
         res.status(200).send(req.user);
     }
+})
+app.get('/testing',(req,res)=>{
+    res.status(200).send('testing');
 })
 app.get('/auth/logout',(req,res)=>{
     req.logOut()
