@@ -12,7 +12,9 @@ const {
     CLIENT_ID,
     CLIENT_SECRET,
     CALLBACK_URL,
-    CONNECTION_STRING
+    CONNECTION_STRING,
+    REACT_APP_PRIVATES,
+    REACT_APP_FAILURE
 }=process.env;
 
 const app=express();
@@ -20,6 +22,8 @@ const app=express();
 massive(CONNECTION_STRING).then(db=>{
     app.set('db',db);
 });
+
+app.use(express.static(`{${__dirname}/../build`))
 
 app.use(session({
     secret:SESSION_SECRET,
@@ -61,8 +65,8 @@ passport.deserializeUser((id,done)=>{                       // takes sid, gets u
 
 app.get('/auth',passport.authenticate('auth0'));
 app.get('/auth/callback',passport.authenticate('auth0',{
-    successRedirect:'http://localhost:3000/#/private',
-    failureRedirect:'http://google.com/teapot'
+    successRedirect:REACT_APP_PRIVATES,
+    failureRedirect:REACT_APP_FAILURE
 }))
 app.get('/auth/me',(req,res)=>{
     if(!req.user){
@@ -73,7 +77,7 @@ app.get('/auth/me',(req,res)=>{
 })
 app.get('/auth/logout',(req,res)=>{
     req.logOut()
-    res.redirect('http://google.com/teapot')
+    res.redirect(REACT_APP_FAILURE)
 })
 
 app.listen(SERVER_PORT,()=>console.log(`ITS OVER ${SERVER_PORT}`));

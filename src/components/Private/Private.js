@@ -21,7 +21,7 @@ class Private extends React.Component {
                 <p>Email: { user ? user.email : null }</p>
                 <p>ID: { user ? user.auth_id : null }</p>
                 <h4>Available balance: { user ? this.bankBalance() : null } </h4>
-                <a href='http://localhost:9000/auth/logout'><button>Log out</button></a>
+                <a href={process.env.REACT_APP_LOGOUT}><button>Log out</button></a>
             </div> 
         )
     }
